@@ -1,0 +1,7 @@
+# cmake build folders
+build/
+Debug/
+Release/
+
+# vscode config
+.vscode/
