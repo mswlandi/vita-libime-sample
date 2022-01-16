@@ -1,15 +1,13 @@
-#include <psp2/types.h>
+#include <psp2/sysmodule.h>
 #include <psp2/display.h>
 #include <psp2/common_dialog.h>
 #include <psp2/libime.h>
-// #include <psp2/kernel/sysmem.h>
 #include <psp2/kernel/clib.h> 
 #include <psp2/kernel/processmgr.h> 
 #include <vita2d.h>
 
 SceUInt32 libime_work[SCE_IME_WORK_BUFFER_SIZE / sizeof(SceInt32)];
-SceWChar16 libime_out[SCE_IME_MAX_TEXT_LENGTH + 1];
-SceWChar16 libime_out[SCE_IME_MAX_TEXT_LENGTH + 1];
+SceWChar16 libime_out[SCE_IME_MAX_PREEDIT_LENGTH + SCE_IME_MAX_TEXT_LENGTH + 1];
 char libime_initval[8] = { 1 };
 SceImeCaret caret_rev;
 
@@ -42,6 +40,8 @@ void VITA_ImeEventHandler(void* arg, const SceImeEventData* e)
 
 int main(int argc, const char *argv[]) {
 
+	sceSysmoduleLoadModule(SCE_SYSMODULE_IME);
+	
 	vita2d_init();
 	vita2d_set_clear_color(RGBA8(0x40, 0x40, 0x40, 0xFF));
 
@@ -64,7 +64,6 @@ int main(int argc, const char *argv[]) {
 	res = sceImeOpen(&param);
 
 	if (res < 0) {
-		// error - failed to open
 		sceKernelExitProcess(0);
 		return 0;
 	}
